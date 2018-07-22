@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
-import style from './style.scss';
-import axios from 'axios';
+// import style from './style.scss';
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_KEY
@@ -9,17 +8,17 @@ const Mapbox = ReactMapboxGl({
 
 
 class Map extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      points: []
-    }
-  }
-  
   componentDidMount() {
-    // axios.get('')
-        //  .then((respond) => this.setState({ points: respond.data }))
+    
+  }
+
+  renderPoints = () =>  {
+    return this.props.points.map((point, i) => {
+      return <Feature key={i}
+              coordinates={
+                [point.station.gps.longitude, point.station.gps.latitude]
+              }/>
+    })
   }
   
   render() {
@@ -30,16 +29,17 @@ class Map extends React.Component {
           containerStyle={{
             height: "100vh",
             width: "100vw"
-          }
-        }>
-          <Layer
-            type="symbol"
-            id="marker"
-            layout={{ "icon-image": "marker-15" }}>
-            { this.props.points.map((point) => {
-              <Feature coordinates={[-0.481747846041145, 51.3233379650232]}/>
-            })}
-          </Layer>
+          }}
+          onDragEnd={(e) => this.props.getPoints(e.getBounds())}
+          onStyleLoad={(e) => this.props.getPoints(e.getBounds())}
+          onZoomEnd={(e) => this.props.getPoints(e.getBounds())}
+          >
+            <Layer
+              type="symbol"
+              id="marker"
+              layout={{ "icon-image": "harbor-15" }}>
+              {this.renderPoints()}
+            </Layer>
         </Mapbox>
       </React.Fragment>
     );

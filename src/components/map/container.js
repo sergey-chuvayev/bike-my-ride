@@ -10,19 +10,36 @@ class MapContainer extends React.Component {
     }
 
     componentDidMount() {
-        this.props.loadPoints(
-            {
-                gpsTopLatitude: 48.858859657952195,
-                gpsTopLongitude: 2.3620031727477913,
-                gpsBotLatitude: 48.85497723634969,
-                gpsBotLongitude: 2.34655364882201,
-                zoomLevel: 17
-            }
-        );
+        
+    }
+
+    getPoints = (bounds) => {
+        console.log(bounds);
+        // console.log(bounds.getNorth());
+        // console.log(bounds.getNorthEast());
+        // console.log(bounds.getNorthWest());
+        // console.log(bounds.getSouthEast());
+        // console.log(bounds.getSouthWest());
+        // // this.props.loadPoints({
+        // //     gpsTopLatitude: 48.87071313273786,
+        // //     gpsTopLongitude: 2.4163762852549557,
+        // //     gpsBotLatitude: 48.83965268444643,
+        // //     gpsBotLongitude: 2.2927800938487057,
+        // //     zoomLevel: 14
+        // // });
+        this.props.loadPoints({
+            gpsTopLatitude: bounds.getNorthEast().lat,
+            gpsTopLongitude: bounds.getNorthEast().lng,
+            gpsBotLatitude: bounds.getSouthWest().lat,
+            gpsBotLongitude: bounds.getSouthWest().lng,
+            zoomLevel: 14
+        });
     }
 
     render() {
-        return <Map points={this.props.points} />
+        return <Map
+                points={this.props.points}
+                getPoints={this.getPoints}/>
     }
 }
 

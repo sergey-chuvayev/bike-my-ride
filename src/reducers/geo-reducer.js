@@ -6,8 +6,9 @@ const initialState = {
 
 const geoReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_POINTS:
-            return { ...state, points: [...state.points, action.points] };
+        case GET_POINTS: {
+            return { ...state, points: action.points };
+        }
 
         default:
             return state;

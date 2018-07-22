@@ -13,7 +13,6 @@ export const loadPoints = ({ gpsTopLatitude, gpsTopLongitude, gpsBotLatitude, gp
         axios.get('https://www.velib-metropole.fr/webapi/map/details', { params: {
             gpsTopLatitude, gpsTopLongitude, gpsBotLatitude, gpsBotLongitude, zoomLevel
         } }).then((respond) => {
-            console.log(respond.data);
             dispatch(setPoints(respond.data));
         })
     }
