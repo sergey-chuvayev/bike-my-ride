@@ -1,6 +1,7 @@
 import React from 'react';
+import { config } from '../../config';
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
-// import style from './style.scss';
+import style from './style.scss';
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_KEY
@@ -8,8 +9,16 @@ const Mapbox = ReactMapboxGl({
 
 
 class Map extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      center: config.map.center
+    }
+  }
+
   componentDidMount() {
-    
+    console.log(style)
   }
 
   renderPoints = () =>  {
@@ -25,19 +34,21 @@ class Map extends React.Component {
     return (
       <React.Fragment>
         <Mapbox
-          style="mapbox://styles/mapbox/streets-v9"
-          containerStyle={{
-            height: "100vh",
-            width: "100vw"
+          style={config.map.style}
+          className={style['map']}
+          center={this.state.center}
+          onDragEnd={(e) => {
+            this.props.getPoints(e.getBounds());
+            this.setState({
+              center: e.getBounds().getCenter()
+            })
           }}
-          onDragEnd={(e) => this.props.getPoints(e.getBounds())}
           onStyleLoad={(e) => this.props.getPoints(e.getBounds())}
-          onZoomEnd={(e) => this.props.getPoints(e.getBounds())}
-          >
+          onZoomEnd={(e) => this.props.getPoints(e.getBounds())}>
             <Layer
               type="symbol"
               id="marker"
-              layout={{ "icon-image": "harbor-15" }}>
+              layout={{ "icon-image": config.map.icon }}>
               {this.renderPoints()}
             </Layer>
         </Mapbox>
