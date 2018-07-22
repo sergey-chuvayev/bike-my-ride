@@ -1,4 +1,9 @@
 .map {
     width: 100vw;
     height: 100vh;
+    opacity: 1;
+    transition: opacity 500ms;
+    &.is-hidden {
+        opacity: 0;
+    }
 }

@@ -1,27 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { config } from '../../config';
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
+import classnames from 'classnames';
 import style from './style.scss';
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_KEY
 })
 
-
 class Map extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      center: config.map.center
+      center: config.map.center,
+      mapIsHidden: true
     }
   }
 
-  componentDidMount() {
-    console.log(style)
+  static propTypes = {
+    points: PropTypes.array,
+    getPoints: PropTypes.func
   }
 
-  renderPoints = () =>  {
+  componentDidMount() {
+    
+  }
+
+  renderPoints = () => {
     return this.props.points.map((point, i) => {
       return <Feature key={i}
               coordinates={
@@ -29,21 +36,24 @@ class Map extends React.Component {
               }/>
     })
   }
+
+  unhideMap = () => {
+    this.setState({ mapIsHidden: false });
+  }
   
   render() {
     return (
       <React.Fragment>
         <Mapbox
           style={config.map.style}
-          className={style['map']}
+          className={classnames(style['map'], { [style['is-hidden']]: this.state.mapIsHidden })}
           center={this.state.center}
-          onDragEnd={(e) => {
-            this.props.getPoints(e.getBounds());
-            this.setState({
-              center: e.getBounds().getCenter()
-            })
+          zoom={this.state.zoom}
+          onDragEnd={(e) => this.props.getPoints(e.getBounds())}
+          onStyleLoad={(e) => {
+            this.unhideMap();
+            // this.props.getPoints(e.getBounds())
           }}
-          onStyleLoad={(e) => this.props.getPoints(e.getBounds())}
           onZoomEnd={(e) => this.props.getPoints(e.getBounds())}>
             <Layer
               type="symbol"

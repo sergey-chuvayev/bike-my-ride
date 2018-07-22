@@ -1,0 +1,21 @@
+.modal-container {
+    position: fixed;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0, 0, 0, .3);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.is-hidden {
+        display: none;
+    }
+}
+
+.modal {
+    width: 500px;
+    height: 400px;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.50);
+    border-radius: 4px;
+    background-color: #fff;
+    padding: 20px;
+}

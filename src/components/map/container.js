@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Map from './index';
 import { connect } from 'react-redux';
 
@@ -9,30 +10,22 @@ class MapContainer extends React.Component {
         super(props);
     }
 
+    static propTypes = {
+        loadPoints: PropTypes.func,
+        points: PropTypes.array
+    }
+
     componentDidMount() {
-        
     }
 
     getPoints = (bounds) => {
-        console.log(bounds);
-        // console.log(bounds.getNorth());
-        // console.log(bounds.getNorthEast());
-        // console.log(bounds.getNorthWest());
-        // console.log(bounds.getSouthEast());
-        // console.log(bounds.getSouthWest());
-        // // this.props.loadPoints({
-        // //     gpsTopLatitude: 48.87071313273786,
-        // //     gpsTopLongitude: 2.4163762852549557,
-        // //     gpsBotLatitude: 48.83965268444643,
-        // //     gpsBotLongitude: 2.2927800938487057,
-        // //     zoomLevel: 14
-        // // });
+        
         this.props.loadPoints({
             gpsTopLatitude: bounds.getNorthEast().lat,
             gpsTopLongitude: bounds.getNorthEast().lng,
             gpsBotLatitude: bounds.getSouthWest().lat,
             gpsBotLongitude: bounds.getSouthWest().lng,
-            zoomLevel: 14
+            zoomLevel: 14 // todo
         });
     }
 
