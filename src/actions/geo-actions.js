@@ -36,9 +36,15 @@ export const loadPoints = ({ gpsTopLatitude, gpsTopLongitude, gpsBotLatitude, gp
 }
 
 export const setDestination = (latLng) => {
-  console.log(latLng)
   return {
     type: types.SET_DESTINATION,
+    latLng
+  }
+}
+
+export const setDeparture = (latLng) => {
+  return {
+    type: types.SET_DEPARTURE,
     latLng
   }
 }

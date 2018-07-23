@@ -2,13 +2,13 @@ import React from 'react';
 import style from './style.scss';
 import MapContainer from '../map/container';
 import Modal from '../modal';
-import Form from '../form';
+import FormContainer from '../form/container';
 
 const Root = () => {
   return (
     <React.Fragment>
       <Modal>
-        <Form />
+        <FormContainer />
       </Modal>
       <div className={style['root-container']}>
         <MapContainer />
