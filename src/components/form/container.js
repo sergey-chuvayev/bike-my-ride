@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setDestination, setDeparture } from '../../actions/geo-actions';
+import { setDestination, setDeparture, loadNearestPoints } from '../../actions/geo-actions';
 import { toggleModal } from '../../actions/ui-actions';
 import Form from './index';
 
@@ -14,6 +14,10 @@ class FormContainer extends React.Component {
     setDestination: PropTypes.func,
     setDeparture: PropTypes.func,
     toggleModal: PropTypes.func
+  }
+
+  componentDidMount() {
+    this.props.loadNearestPoints();
   }
 
   render() {
@@ -31,7 +35,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setDestination: (latLng) => dispatch(setDestination(latLng)),
     setDeparture: (latLng) => dispatch(setDeparture(latLng)),
-    toggleModal: (opened) => dispatch(toggleModal(opened))
+    toggleModal: (opened) => dispatch(toggleModal(opened)),
+    loadNearestPoints: () => dispatch(loadNearestPoints())
   }
 }
 

@@ -6,10 +6,12 @@ import {
   GET_POINTS_REQUEST,
   SET_DESTINATION,
   SET_DEPARTURE,
+  GET_NEAREST_POINTS,
 } from '../constants/action-types.js';
 
 const initialState = {
   points: [],
+  nearestPoints: [],
   destination: {},
   departure: config.map.center
 }
@@ -28,10 +30,11 @@ const geoReducer = (state = initialState, action) => {
     case SET_DESTINATION:
       return { ...state, destination: action.latLng }
 
-    case SET_DEPARTURE: {
-      console.log(action.latLng)
+    case SET_DEPARTURE:
       return { ...state, departure: action.latLng }
-    }
+
+    case GET_NEAREST_POINTS:
+      return { ...state, nearestPoints: action.points };
     
     default:
       return state;
