@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import style from './style.scss';
 import LocationAutocomplete from '../location-autocomplete';
 
-const Form = ({ setDeparture, setDestination }) => {  
+const Form = ({ setDeparture, setDestination, toggleModal }) => {  
   return (
     <div className={style['form-container']}>
       <div>
@@ -17,7 +17,7 @@ const Form = ({ setDeparture, setDestination }) => {
       </div>
 
       <div style={{ marginTop: '40px' }}>
-        <button onClick={() => console.log('let\'s bike')}>Bike my ride</button>
+        <button onClick={() => toggleModal(false)}>Bike my ride</button>
       </div>
     </div>
   );
@@ -26,6 +26,7 @@ const Form = ({ setDeparture, setDestination }) => {
 Form.propTypes = {
   setDestination: PropTypes.func,
   setDeparture: PropTypes.func,
+  toggleModal: PropTypes.func,
 }
 
 export default Form;

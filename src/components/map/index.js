@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { config } from '../../config';
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
@@ -14,18 +15,15 @@ class Map extends React.Component {
     super(props);
 
     this.state = {
-      center: config.map.center,
+      zoom: config.map.zoom,
       mapIsHidden: true
     }
+    this.map = null;
   }
 
   static propTypes = {
     points: PropTypes.array,
     getPoints: PropTypes.func
-  }
-
-  componentDidMount() {
-    
   }
 
   renderPoints = () => {
@@ -39,6 +37,10 @@ class Map extends React.Component {
 
   unhideMap = () => {
     this.setState({ mapIsHidden: false });
+    // this.setState({
+    //   zoom: 1
+    // })
+    
   }
   
   render() {
@@ -46,10 +48,10 @@ class Map extends React.Component {
       <React.Fragment>
         <Mapbox
           style={config.map.style}
+          ref={(node) => this.map = ReactDOM.findDOMNode(node)}
           className={classnames(style['map'], { [style['is-hidden']]: this.state.mapIsHidden })}
-          center={this.state.center}
-          zoom={this.state.zoom}
-          onDragEnd={(e) => this.props.getPoints(e.getBounds())}
+          center={this.props.departure}
+          onDragEnd={(e) => {this.props.getPoints(e.getBounds())}}
           onStyleLoad={(e) => {
             this.unhideMap();
             // this.props.getPoints(e.getBounds())
@@ -58,7 +60,7 @@ class Map extends React.Component {
             <Layer
               type="symbol"
               id="marker"
-              layout={{ "icon-image": config.map.icon }}>
+              layout={{ "icon-image": config.map.icon, "icon-size": 1.2 }}>
               {this.renderPoints()}
             </Layer>
         </Mapbox>

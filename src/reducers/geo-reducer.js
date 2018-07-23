@@ -1,3 +1,5 @@
+import { config } from '../config'
+
 import {
   GET_POINTS_ERROR,
   GET_POINTS_SUCCESS,
@@ -9,7 +11,7 @@ import {
 const initialState = {
   points: [],
   destination: {},
-  departure: {}
+  departure: config.map.center
 }
 
 const geoReducer = (state = initialState, action) => {
@@ -26,8 +28,10 @@ const geoReducer = (state = initialState, action) => {
     case SET_DESTINATION:
       return { ...state, destination: action.latLng }
 
-    case SET_DEPARTURE:
+    case SET_DEPARTURE: {
+      console.log(action.latLng)
       return { ...state, departure: action.latLng }
+    }
     
     default:
       return state;

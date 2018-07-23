@@ -12,10 +12,8 @@ class MapContainer extends React.Component {
 
     static propTypes = {
         loadPoints: PropTypes.func,
-        points: PropTypes.array
-    }
-
-    componentDidMount() {
+        points: PropTypes.array,
+        
     }
 
     getPoints = (bounds) => {
@@ -32,13 +30,15 @@ class MapContainer extends React.Component {
     render() {
         return <Map
                 points={this.props.points}
-                getPoints={this.getPoints}/>
+                getPoints={this.getPoints}
+                departure={this.props.departure}/>
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        points: state.geo.points
+        points: state.geo.points,
+        departure: state.geo.departure
     }
 }
 
