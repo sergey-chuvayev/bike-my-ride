@@ -28,10 +28,10 @@ const geoReducer = (state = initialState, action) => {
       return { ...state, isLoading: true, error: null };
     
     case SET_DESTINATION:
-      return { ...state, destination: action.latLng }
+      return { ...state, destination: { ...state.destination, ...action.latLng } }
 
     case SET_DEPARTURE:
-      return { ...state, departure: action.latLng }
+      return { ...state, departure: { ...state.departure, ...action.latLng } }
 
     case GET_NEAREST_POINTS:
       return { ...state, nearestPoints: action.points };

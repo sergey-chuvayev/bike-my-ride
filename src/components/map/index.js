@@ -23,7 +23,8 @@ class Map extends React.Component {
 
   static propTypes = {
     points: PropTypes.array,
-    getPoints: PropTypes.func
+    getPoints: PropTypes.func,
+    openModal: PropTypes.func,
   }
 
   renderPoints = () => {
@@ -64,6 +65,9 @@ class Map extends React.Component {
               {this.renderPoints()}
             </Layer>
         </Mapbox>
+        <div className={style['button']}>
+          <button onClick={this.props.openModal}>Find another bike station</button>
+        </div>
       </React.Fragment>
     );
   }

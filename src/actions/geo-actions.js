@@ -25,13 +25,25 @@ const setPointsSuccess = (points) => {
 };
 
 export const loadPoints = ({ gpsTopLatitude, gpsTopLongitude, gpsBotLatitude, gpsBotLongitude, zoomLevel }) => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch(setPointsRequest());
     axios.get('https://www.velib-metropole.fr/webapi/map/details', { params: {
       gpsTopLatitude, gpsTopLongitude, gpsBotLatitude, gpsBotLongitude, zoomLevel
     } }).then(response => response.data)
     .then((response) => dispatch(setPointsSuccess(response)))
     .catch((error) => dispatch(setPointsError(error)))
+  }
+}
+
+export const loadAllPoints = () => {
+  return dispatch => {
+    dispatch(loadPoints({ // hardcoded whole world coordinates
+      gpsTopLatitude: 180,
+      gpsTopLongitude: 90,
+      gpsBotLatitude: -180,
+      gpsBotLongitude: -90,
+      zoomLevel: 11
+    }))
   }
 }
 
@@ -49,14 +61,7 @@ export const setDeparture = (latLng) => {
   }
 }
 
-export const loadNearestPoints = (point) => {
-  return (dispatch) => {
-    // todo work with matrix api
-    axios.get(`http://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.6905615%2C-73.9976592%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626%7C40.659569%2C-73.933783%7C40.729029%2C-73.851524%7C40.6860072%2C-73.6334271%7C40.598566%2C-73.7527626&key=${process.env.REACT_APP_GOOGLE_APIS}`)
-         .then(response => response.data)
-         .then((response) => dispatch(getNearestPoints(response)))
-  }
-}
+
 
 const getNearestPoints = (points) => {
   return {

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mapbox/mapbox-sdk": "^0.3.0",
     "@turf/nearest": "^4.7.3",
     "autoprefixer": "7.1.6",
     "axios": "^0.18.0",
