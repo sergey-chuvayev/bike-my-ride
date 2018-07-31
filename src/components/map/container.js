@@ -55,22 +55,12 @@ class MapContainer extends React.Component {
 
     this.setState({
       points: nearest.map(nearestPoint => {
-        return { lat: nearestPoint[0].coordinates[0], lng: nearestPoint[0].coordinates[1] }
+        return {
+          lat: nearestPoint[0].coordinates[0],
+          lng: nearestPoint[0].coordinates[1]
+        }
       })
     });
-
-    // const service = new GeoServise();
-    // const closest = service.findClosestPoints(
-    //   this.props.departure, 
-    //   this.props.points.map(point => { return {
-    //     lat: point.lat,
-    //     lng: point.lng
-    //   } }),
-    //   config.amountOfClosestPoints
-    // );
-    // this.setState({
-    //   points: closest
-    // })
   }
   
   getPoints = (bounds) => {
