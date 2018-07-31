@@ -31,7 +31,7 @@ class Map extends React.Component {
     return this.props.points.map((point, i) => {
       return <Feature key={i}
               coordinates={
-                [point.station.gps.longitude, point.station.gps.latitude]
+                [point.lng, point.lat]
               }/>
     })
   }
@@ -43,6 +43,10 @@ class Map extends React.Component {
     // })
     
   }
+
+  updateMapPoints = (bounds) => {
+    this.props.getPoints(bounds);
+  }
   
   render() {
     return (
@@ -52,12 +56,11 @@ class Map extends React.Component {
           ref={(node) => this.map = ReactDOM.findDOMNode(node)}
           className={classnames(style['map'], { [style['is-hidden']]: this.state.mapIsHidden })}
           center={this.props.departure}
-          onDragEnd={(e) => {this.props.getPoints(e.getBounds())}}
+          onDragEnd={(e) => {this.updateMapPoints(e.getBounds())}}
           onStyleLoad={(e) => {
             this.unhideMap();
-            // this.props.getPoints(e.getBounds())
-          }}
-          onZoomEnd={(e) => this.props.getPoints(e.getBounds())}>
+           }}
+          onZoomEnd={(e) => this.updateMapPoints(e.getBounds())}>
             <Layer
               type="symbol"
               id="marker"

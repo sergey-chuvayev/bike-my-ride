@@ -18,8 +18,18 @@ const initialState = {
 
 const geoReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_POINTS_SUCCESS:
-      return { ...state, isLoading: false, points: action.payload };
+    case GET_POINTS_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        points: action.payload.map(point => {
+          return {
+            lat: point.station.gps.latitude,
+            lng: point.station.gps.longitude
+          }
+        })
+      };
+    }
     
     case GET_POINTS_ERROR:
       return { ...state, isLoading: false, error: action.payload };

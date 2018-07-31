@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Map from './index';
 import { connect } from 'react-redux';
-import matrixService from '@mapbox/mapbox-sdk/services/matrix';
+import GeoServise from '../../services/geo-service';
+import { config } from '../../config';
+import KDTree from 'k-d-tree';
 
 import { loadPoints, loadAllPoints } from '../../actions/geo-actions';
 import { toggleModal } from '../../actions/ui-actions';
-
-
-const matrixClient = matrixService({ accessToken: process.env.REACT_APP_MAPBOX_ACCESS_TOKEN });
 
 class MapContainer extends React.Component {
   constructor(props) {
@@ -17,7 +16,8 @@ class MapContainer extends React.Component {
     this.state = {
       departure: this.props.departure,
       destination: {},
-      distances: []
+      distances: [],
+      points: this.props.points
     }
   }
   
@@ -38,41 +38,39 @@ class MapContainer extends React.Component {
   }
   
   findNearestPoints = () => {
-    let distances = [];
 
-    const points = this.props.points;
-    const step = 24; // restriction of mapbox api
+    const points = this.props.points.map(point => { // convert to geojson (need for the lib)
+      return { coordinates: [point.lat, point.lng] }
+    })
 
-    for (let i = 0; i < points.length; i+=step) {
-      let filteredPoints = [{
-        coordinates: [this.props.departure.lat, this.props.departure.lng]
-      }]; // with [0] point as a departure
+    const tree = new KDTree(points, (a, b) => {
+      return Math.pow(a.lat - b.lat, 2) +  Math.pow(a.lng - b.lng, 2); // simple euclidean distance
+    });
 
-      for (let j = i; j < i+step; j++) {
-        if (points[j]) {
-          filteredPoints.push({
-            coordinates: [points[j].station.gps.longitude, points[j].station.gps.latitude]
-          });
-        }
-      }
+    const nearest = tree.nearest({
+      coordinates: [
+        this.props.departure.lat, this.props.departure.lng
+      ]
+    }, config.amountOfClosestPoints);
 
-      matrixClient.getMatrix({
-        points: filteredPoints,
-        profile: 'walking',
-        sources: [0],
-        destinations: Array.from({length: step}, (v, k) => k+1), // this api is really weird
-        annotations: ['distance']
+    this.setState({
+      points: nearest.map(nearestPoint => {
+        return { lat: nearestPoint[0].coordinates[0], lng: nearestPoint[0].coordinates[1] }
       })
-        .send()
-        .then(response => {
-          const matrix = response.body;
-          this.setState({
-            distances: [...this.state.distances, ...matrix.distances[0]]
-          });
-          console.log(i);
-      });
-    }
+    });
 
+    // const service = new GeoServise();
+    // const closest = service.findClosestPoints(
+    //   this.props.departure, 
+    //   this.props.points.map(point => { return {
+    //     lat: point.lat,
+    //     lng: point.lng
+    //   } }),
+    //   config.amountOfClosestPoints
+    // );
+    // this.setState({
+    //   points: closest
+    // })
   }
   
   getPoints = (bounds) => {
@@ -87,7 +85,7 @@ class MapContainer extends React.Component {
   
   render() {
     return <Map
-    points={this.props.points}
+    points={this.state.points}
     getPoints={this.getPoints}
     departure={this.props.departure}
     openModal={this.props.openModal}/>
